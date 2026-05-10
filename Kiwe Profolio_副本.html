@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiwe Zheng | Product Marketing Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --apple-bg: #f5f5f7;
+            --apple-text: #1d1d1f;
+            --apple-blue: #0071e3;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #fff;
+            color: var(--apple-text);
+            scroll-behavior: smooth;
+        }
+        .hero-gradient {
+            background: linear-gradient(180deg, #fff 0%, #f5f5f7 100%);
+        }
+        .section-padding {
+            padding: 100px 20px;
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .bento-card {
+            background: #f5f5f7;
+            border-radius: 24px;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        .bento-card:hover {
+            transform: scale(1.02);
+        }
+        .img-placeholder {
+            background: #e8e8ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #86868b;
+            font-size: 14px;
+            text-align: center;
+            padding: 20px;
+        }
+        .text-balanced {
+            text-wrap: balance;
+        }
+        /* 动画效果 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- 导航栏 -->
+    <nav class="glass-nav fixed top-0 w-full z-50">
+        <div class="max-w-6xl mx-auto px-6 h-12 flex items-center justify-between">
+            <div class="font-semibold text-lg tracking-tight">Kiwe Zheng</div>
+            <div class="hidden md:flex space-x-8 text-xs font-medium text-gray-600">
+                <a href="#home" class="hover:text-black transition">首页</a>
+                <a href="#about" class="hover:text-black transition">定位</a>
+                <a href="#cases" class="hover:text-black transition">核心案例</a>
+                <a href="#skills" class="hover:text-black transition">能力图谱</a>
+                <a href="#contact" class="hover:text-black transition">联系方式</a>
+            </div>
+            <a href="#contact" class="bg-black text-white px-3 py-1 rounded-full text-xs">联系我</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-gradient min-h-screen flex flex-col items-center justify-center text-center section-padding pt-32">
+        <div class="reveal">
+            <h2 class="text-xl md:text-2xl font-semibold mb-4 text-gray-500">Product Marketing</h2>
+            <h1 class="text-5xl md:text-8xl font-bold mb-8 tracking-tighter">郑佳乐 Kiwe Zheng</h1>
+            <p class="text-2xl md:text-3xl font-medium max-w-3xl mx-auto text-gray-600 leading-tight text-balanced">
+                B2B 出海品牌赋能 · 6年制造业实战<br>
+                <span class="text-gray-400">用判断力，而非仅仅是设计感，驱动品牌增长。</span>
+            </p>
+        </div>
+        <div class="mt-16 reveal delay-200">
+            <div class="img-placeholder w-80 h-48 rounded-3xl mx-auto border border-gray-200">
+                [图片：个人职业形象照 / 核心视觉图]
+            </div>
+        </div>
+    </section>
+
+    <!-- 我是谁 -->
+    <section id="about" class="max-w-6xl mx-auto section-padding px-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bento-card p-10 flex flex-col justify-between h-80 reveal">
+                <h3 class="text-2xl font-bold">最懂产品的<br>市场人</h3>
+                <p class="text-gray-500">将“技术参数”降维翻译为“市场语言”，解决研发与市场间的认知断层。</p>
+            </div>
+            <div class="bento-card p-10 flex flex-col justify-between h-80 reveal delay-100">
+                <h3 class="text-2xl font-bold">B2B 销售<br>赋能者</h3>
+                <p class="text-gray-500">拒绝传声筒。把复杂逻辑打磨成销售能直接成交的利刃，深度介入 Sales Kit。</p>
+            </div>
+            <div class="bento-card p-10 flex flex-col justify-between h-80 reveal delay-200">
+                <h3 class="text-2xl font-bold">从0到1<br>执行者</h3>
+                <p class="text-gray-500">实战独立站、内容体系、全球展会全链路闭环，让战略真正落地生根。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心案例 1: 展会场景化 -->
+    <section id="cases" class="bg-black text-white section-padding">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="mb-16 reveal">
+                <h2 class="text-4xl md:text-6xl font-bold tracking-tight mb-6">场景化重构：<br>让展位自己会说话</h2>
+                <p class="text-gray-400 text-xl max-w-2xl">在法兰克福展等顶级赛事中，通过“Fresh Organic”等场景化设计，将 B2B 采购从理性的参数对比转化为感性的信任建立。</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-24">
+                <div class="reveal">
+                    <div class="img-placeholder rounded-3xl aspect-square text-black">
+                        [图片：法兰克福展会场景化实拍 - 侧重空间感]
+                    </div>
+                </div>
+                <div class="space-y-8 reveal delay-200">
+                    <div>
+                        <h4 class="text-2xl font-bold mb-2 text-white">判断力：差异化竞争</h4>
+                        <p class="text-gray-400">避开同质化的产品陈列，通过应用场景与生活化叙事，让品牌在数千个展位中脱颖而出。</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="border-l-2 border-blue-500 pl-4">
+                            <div class="text-4xl font-bold text-blue-500">+50%</div>
+                            <div class="text-sm text-gray-400">SQL 高意向询盘提升</div>
+                        </div>
+                        <div class="border-l-2 border-green-500 pl-4">
+                            <div class="text-4xl font-bold text-green-500">46.8%</div>
+                            <div class="text-sm text-gray-400">有效客户 YoY 增长</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心案例 2: Bianova -->
+    <section class="section-padding bg-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+                <div class="md:col-span-5 reveal">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">Bianova: <br>品牌重塑从0到1</h2>
+                    <p class="text-gray-600 mb-8">在职责范围外，我通过主动判断，重构了品牌的视觉定调与拍摄脚本，将“技术黑盒”转化为“品牌溢价”。</p>
+                    <ul class="space-y-4 text-gray-500">
+                        <li class="flex items-start"><span class="text-blue-500 mr-2">●</span> 独立编纂全球品牌视觉手册</li>
+                        <li class="flex items-start"><span class="text-blue-500 mr-2">●</span> 全链重写产品叙事文案</li>
+                        <li class="flex items-start"><span class="text-blue-500 mr-2">●</span> 全球站点内容框架完整采用</li>
+                    </ul>
+                </div>
+                <div class="md:col-span-7 reveal delay-200">
+                    <div class="img-placeholder rounded-3xl h-96">
+                        [图片：Bianova 品牌白皮书 / 网站 UI 局部图]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心案例 3: 内容体系 -->
+    <section class="section-padding bg-gray-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="bento-card p-12 md:p-20 reveal">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-4xl font-bold mb-6">Sales Kit：<br>120页战略赋能</h2>
+                        <p class="text-gray-600 mb-6">从 1000+ 琐碎的技术参数中，提炼出 3 大核心商业价值。让销售不再只谈价格，而是谈商业对抗逻辑。</p>
+                        <div class="bg-white p-6 rounded-2xl border border-gray-200 inline-block">
+                            <p class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-widest">核心产出</p>
+                            <p class="text-lg font-medium italic">“把技术参数变成销售能直接成交的武器”</p>
+                        </div>
+                    </div>
+                    <div class="img-placeholder rounded-2xl h-80 shadow-sm">
+                        [图片：120页产品战略手册 - 封面及内页排版]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 更多跨界能力 -->
+    <section class="section-padding">
+        <div class="max-w-6xl mx-auto px-6">
+            <h3 class="text-2xl font-bold mb-12 text-center reveal">全链路品牌运营能力</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center reveal">
+                    <div class="img-placeholder rounded-2xl aspect-square mb-4">[图片：缸鸭狗活动]</div>
+                    <p class="font-semibold">大型互动运营</p>
+                </div>
+                <div class="text-center reveal delay-100">
+                    <div class="img-placeholder rounded-2xl aspect-square mb-4">[图片：山姆定制包装]</div>
+                    <p class="font-semibold">渠道品牌定制</p>
+                </div>
+                <div class="text-center reveal delay-200">
+                    <div class="img-placeholder rounded-2xl aspect-square mb-4">[图片：项目进度表]</div>
+                    <p class="font-semibold">精细化项目管理</p>
+                </div>
+                <div class="text-center reveal delay-300">
+                    <div class="img-placeholder rounded-2xl aspect-square mb-4">[图片：非遗插画画册]</div>
+                    <p class="font-semibold">品牌文化资产</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 能力图谱 -->
+    <section id="skills" class="section-padding bg-black text-white">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-16 text-center reveal">数字化营销能力图谱</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="reveal">
+                    <h4 class="text-blue-400 text-sm font-bold uppercase mb-4 tracking-widest">实战工具栈</h4>
+                    <p class="text-lg mb-2">Shopify 建站 / Mailchimp EDM</p>
+                    <p class="text-lg mb-2">Meta Ads / 像素埋点</p>
+                    <p class="text-lg">Google Digital Marketing</p>
+                </div>
+                <div class="reveal delay-100">
+                    <h4 class="text-blue-400 text-sm font-bold uppercase mb-4 tracking-widest">深化领域</h4>
+                    <p class="text-lg mb-2">SEO & SEM 理论框架</p>
+                    <p class="text-lg mb-2">CDJ 消费者决策旅程</p>
+                    <p class="text-lg">数据驱动营销模型</p>
+                </div>
+                <div class="reveal delay-200">
+                    <h4 class="text-blue-400 text-sm font-bold uppercase mb-4 tracking-widest">战略思考</h4>
+                    <p class="text-lg mb-2">Product Strategy (Kellogg)</p>
+                    <p class="text-lg mb-2">品牌资产结构化</p>
+                    <p class="text-lg">AI 辅助内容生产中台</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 增长数据墙 (Bento Style) -->
+    <section class="section-padding bg-white">
+        <div class="max-w-5xl mx-auto px-6">
+            <h2 class="text-center text-3xl font-bold mb-16 reveal">增长实战答卷</h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-6">
+                <div class="bento-card p-8 text-center reveal">
+                    <div class="text-4xl font-bold mb-2">845%</div>
+                    <div class="text-gray-500 text-sm text-balanced">全平台粉丝增长 (7k→6w+)</div>
+                </div>
+                <div class="bento-card p-8 text-center reveal">
+                    <div class="text-4xl font-bold mb-2">120页</div>
+                    <div class="text-gray-500 text-sm text-balanced">独立编纂全球战略手册</div>
+                </div>
+                <div class="bento-card p-8 text-center reveal">
+                    <div class="text-4xl font-bold mb-2">4个</div>
+                    <div class="text-gray-500 text-sm text-balanced">差异化独立站从0搭建</div>
+                </div>
+                <div class="bento-card p-8 text-center reveal">
+                    <div class="text-4xl font-bold mb-2">100+</div>
+                    <div class="text-gray-500 text-sm text-balanced">单场活动B端高意向客户</div>
+                </div>
+                <div class="bento-card p-8 text-center reveal">
+                    <div class="text-4xl font-bold mb-2">1500+</div>
+                    <div class="text-gray-500 text-sm text-balanced">深度拆解的产品SKU数量</div>
+                </div>
+                <div class="bento-card p-8 text-center reveal">
+                    <div class="text-4xl font-bold mb-2">5/5</div>
+                    <div class="text-gray-500 text-sm text-balanced">关键项目节点交付率</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 我能为渠成做什么 -->
+    <section class="section-padding bg-gray-50">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center gap-16">
+                <div class="flex-1 reveal">
+                    <h2 class="text-4xl font-bold mb-8">我能为渠成做什么？</h2>
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">1</div>
+                            <div>
+                                <h4 class="font-bold">建立B2B品牌叙事工具包</h4>
+                                <p class="text-gray-500 text-sm">为北弧/松能构建方案级叙事，让经销商不仅卖产品，更卖品牌信用。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">2</div>
+                            <div>
+                                <h4 class="font-bold">场景化内容重构获客逻辑</h4>
+                                <p class="text-gray-500 text-sm">将展会验证的成功经验转化为线上引流模型，提升独立站高价值线索。</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="bg-black text-white w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0">3</div>
+                            <div>
+                                <h4 class="font-bold">搭建 AI 内容生产中台</h4>
+                                <p class="text-gray-500 text-sm">利用 AI 辅助，降低多语种、专业内容的生产人效成本。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-1 reveal delay-200">
+                    <div class="img-placeholder rounded-3xl h-80">
+                        [图片：人体工学支架 / 智能化办公应用场景图]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <footer id="contact" class="section-padding text-center bg-white">
+        <div class="reveal">
+            <h2 class="text-4xl md:text-6xl font-bold mb-12 tracking-tight">期待与您共同赋能<br>品牌全球化</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-10">
+                <div class="text-xl">
+                    <span class="text-gray-400">手机:</span> <span class="font-semibold">15557010290</span>
+                </div>
+                <div class="text-xl">
+                    <span class="text-gray-400">微信:</span> <span class="font-semibold">kiwekiwi</span>
+                </div>
+            </div>
+            <div class="mt-20 pt-10 border-t border-gray-100 text-gray-400 text-sm">
+                &copy; 2026 Kiwe Zheng. Judgment is the ultimate brand differentiation.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 简单的滚动揭示动效
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
