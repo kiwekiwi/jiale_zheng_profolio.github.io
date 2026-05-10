@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiwe | 全球品牌全景资产与 E2E 链路架构</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts: Noto Sans SC for premium typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Kiwe Master Theme
+                        obsidian: { DEFAULT: '#171717', light: '#262626' },
+                        champagne: { DEFAULT: '#D4AF37', light: '#FBF8F1', dark: '#AA8C2C' },
+                        ivory: { DEFAULT: '#FAFAFA', dark: '#F3F4F6' },
+                        // Deye Specific Accents
+                        techgreen: { DEFAULT: '#00A859', light: '#E6F6ED', dark: '#007A41' },
+                        premiumgrey: { DEFAULT: '#4B5563', light: '#9CA3AF', dark: '#1F2937', bg: '#F9FAFB' }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans SC"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base typography and smooth scrolling */
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #FAFAFA;
+            color: #171717;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* <!-- Chosen Palette: Ivory, Obsidian, Champagne (Master) + Tech Green (Deye Accent) -->
+        <!-- Application Structure Plan: A unified, executive-level SPA. The sidebar navigation acts as the strategic master control, divided into "Deye Specific Case" and "Global E2E Architecture". The dynamic content area loads the corresponding strategic pillar. This proves comprehensive capability from high-level corporate strategy (A+H shares) to granular execution (specs translation, SAM's club sales). -->
+        <!-- Visualization & Content Choices: 
+            1. Deye Strategy: Line Chart & Radar Chart (Canvas).
+            2. Deye Value Translation: Interactive A/B Toggle (JS DOM).
+            3. Deye GTM: Interactive Pyramid (HTML/CSS/JS).
+            4. Deye Synergy: Timeline Flow (Tailwind Layout).
+            5. Kiwe Translator: Interactive A/B Comparison (JS DOM).
+            6. Kiwe Engine: Interactive Process Flow (Grid/Hover).
+            7. Kiwe Channel: Line Chart for 845% Growth (Canvas).
+        -->
+        <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+        */
+
+        /* Chart Container Styling as per strict requirements */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 380px; }
+        }
+
+        /* UI Animations */
+        .fade-in {
+            animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #D4AF37; }
+
+        /* Navigation Styling (Kiwe Master Theme) */
+        .nav-item {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background-color: #D4AF37;
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+        .nav-item.active {
+            color: #171717;
+            font-weight: 700;
+            background-color: #FBF8F1;
+            border-right: 3px solid #D4AF37;
+        }
+
+        /* Specific Component Styles */
+        .data-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .data-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: #D4AF37;
+        }
+        
+        .pyramid-level { transition: all 0.3s ease; cursor: pointer; }
+        .pyramid-level:hover { transform: scale(1.02); filter: brightness(1.05); }
+        .pyramid-level.active-level { border: 2px solid #00A859; box-shadow: 0 4px 6px -1px rgba(0, 168, 89, 0.2); }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-72 bg-white border-r border-gray-200 flex flex-col shadow-sm z-10 flex-shrink-0">
+        <div class="p-8 border-b border-gray-100">
+            <h1 class="text-3xl font-black text-obsidian tracking-tighter">KIWE<span class="text-champagne">.</span></h1>
+            <p class="text-xs text-gray-400 mt-2 font-bold tracking-widest uppercase">全景资产与商业架构</p>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4">
+            <!-- Group 1: Deye -->
+            <div class="px-8 py-3">
+                <p class="text-[10px] font-black text-gray-400 tracking-widest uppercase mb-2">PART I: 德业品牌重构战役</p>
+            </div>
+            <ul class="space-y-1 mb-4">
+                <li><button data-target="sec-strategy" class="nav-item active w-full text-left px-8 py-3 text-sm text-obsidian font-bold bg-champagne-light border-r-4 border-champagne">01. 顶层战略与确定性</button></li>
+                <li><button data-target="sec-translation" class="nav-item w-full text-left px-8 py-3 text-sm text-gray-600 hover:text-obsidian">02. 价值翻译与家电美感</button></li>
+                <li><button data-target="sec-gtm" class="nav-item w-full text-left px-8 py-3 text-sm text-gray-600 hover:text-obsidian">03. 体验式营销与中台</button></li>
+                <li><button data-target="sec-synergy" class="nav-item w-full text-left px-8 py-3 text-sm text-gray-600 hover:text-obsidian">04. 跨城协同战术支点</button></li>
+            </ul>
+
+            <div class="border-t border-gray-100 my-2"></div>
+
+            <!-- Group 2: E2E Pipeline -->
+            <div class="px-8 py-3">
+                <p class="text-[10px] font-black text-gray-400 tracking-widest uppercase mb-2">PART II: Kiwe 全局 E2E 操盘链路</p>
+            </div>
+            <ul class="space-y-1 pb-6">
+                <li><button data-target="sec-translator" class="nav-item w-full text-left px-8 py-3 text-sm text-gray-600 hover:text-obsidian">05. 产研转译 (Grace Lighting)</button></li>
+                <li><button data-target="sec-engine" class="nav-item w-full text-left px-8 py-3 text-sm text-gray-600 hover:text-obsidian">06. 资产 SOP (内容工厂)</button></li>
+                <li><button data-target="sec-channel" class="nav-item w-full text-left px-8 py-3 text-sm text-gray-600 hover:text-obsidian">07. 渠道赋能 (缸鸭狗 x 山姆)</button></li>
+            </ul>
+        </nav>
+        <div class="p-8 bg-obsidian text-champagne-light">
+            <div class="text-xs leading-relaxed opacity-80">
+                <span class="font-bold text-champagne tracking-wider">STRATEGIC HEDGE</span><br>
+                不谈努力，只谈增量。<br>
+                优雅的统治力源于确定性。
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto bg-ivory relative scroll-smooth">
+        <div class="max-w-6xl mx-auto p-10 md:p-16">
+            
+            <!-- ========================================== -->
+            <!-- PART I: DEYE SECTIONS -->
+            <!-- ========================================== -->
+
+            <!-- SECTION 01: Strategy -->
+            <section id="sec-strategy" class="content-section fade-in">
+                <header class="mb-10">
+                    <div class="inline-block px-3 py-1 bg-techgreen-light text-techgreen-dark text-xs font-bold rounded-sm mb-4 uppercase tracking-widest">Global Strategic Alignment</div>
+                    <h2 class="text-3xl md:text-4xl font-black text-premiumgrey-dark mb-4">顶层战略：全球化视野下的“确定性”</h2>
+                    <p class="text-lg text-premiumgrey leading-relaxed max-w-3xl">
+                        将 A+H 股的“资本确定性”，转化为溢价抗周期的“品牌信任感”。通过数据论证如何将单纯的“产能输出”转化为具备抗周期能力的品牌护城河，以此支撑 500 亿产值战略。
+                    </p>
+                </header>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-bold mb-2">500亿产值路径：品牌溢价增量</h3>
+                        <p class="text-sm text-premiumgrey-light mb-4">代工与品牌心智份额变现的收入预期对比。</p>
+                        <div class="chart-container"><canvas id="revenueChart"></canvas></div>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                        <h3 class="text-lg font-bold mb-2">战略雷达：差异化市场策略</h3>
+                        <p class="text-sm text-premiumgrey-light mb-4">欧洲高净值需求 vs 南非本土化策略。</p>
+                        <div class="chart-container"><canvas id="radarChart"></canvas></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 border-l-4 border-l-techgreen">
+                    <h4 class="font-bold text-xl mb-3">心智份额（Mindshare）变现逻辑</h4>
+                    <p class="text-premiumgrey leading-relaxed">
+                        单纯产能输出已触及天花板。第一步：剥离“白牌代工”历史包袱，拒绝陷入价格战内卷。第二步：建立全球统一定调的品牌资产复利模型，锁定目标市场心智。
+                    </p>
+                </div>
+            </section>
+
+            <!-- SECTION 02: Value Translation (Deye) -->
+            <section id="sec-translation" class="content-section hidden">
+                <header class="mb-10">
+                    <div class="inline-block px-3 py-1 bg-techgreen-light text-techgreen-dark text-xs font-bold rounded-sm mb-4 uppercase tracking-widest">Value Translation</div>
+                    <h2 class="text-3xl md:text-4xl font-black text-premiumgrey-dark mb-4">从“工业冷感”到“家电美感”</h2>
+                    <p class="text-lg text-premiumgrey leading-relaxed max-w-3xl">
+                        德业的核心锚点是“家电化的小储能”。用户的购买决策终点是体验，而非晦涩的参数堆砌。此板块展示我如何在硬核研发与全球市场之间搭建零损耗的翻译链路。
+                    </p>
+                </header>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+                    <div class="flex flex-col md:flex-row items-center justify-between p-6 bg-gray-50 border-b border-gray-100">
+                        <h3 class="text-lg font-bold">参数视觉化重构 (降维打击演示)</h3>
+                        <div class="mt-4 md:mt-0 flex bg-gray-200 rounded-lg p-1">
+                            <button id="btn-deye-old" class="px-6 py-2 rounded-md text-sm font-bold bg-white shadow-sm text-premiumgrey-dark transition-all">原生状态 (参数)</button>
+                            <button id="btn-deye-new" class="px-6 py-2 rounded-md text-sm font-bold text-premiumgrey hover:text-premiumgrey-dark transition-all">重构状态 (体验)</button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8 min-h-[400px] flex items-center justify-center bg-gray-100 transition-all duration-500" id="deye-ab-area">
+                        <!-- OLD STATE -->
+                        <div id="deye-state-old" class="w-full max-w-2xl bg-white border-2 border-gray-300 p-8 font-mono text-sm text-gray-700 shadow-inner">
+                            <h4 class="text-xl font-bold border-b-2 border-black pb-2 mb-4">DEYE INVERTER SPECS V1.0</h4>
+                            <ul class="space-y-2 list-disc pl-5">
+                                <li>Battery Type: Lead-acid or Lithium-ion</li>
+                                <li>Battery Voltage Range (V): 40~60V</li>
+                                <li>Max. Discharging Current (A): 120A</li>
+                                <li>IP Rating: IP65</li>
+                            </ul>
+                            <div class="mt-6 p-4 bg-gray-200 border border-gray-400 text-center text-gray-500">[工业说明书图示 - 高认知门槛]</div>
+                        </div>
+
+                        <!-- NEW STATE -->
+                        <div id="deye-state-new" class="hidden w-full max-w-2xl bg-white rounded-2xl p-0 overflow-hidden shadow-2xl transition-all duration-500 transform scale-95 opacity-0">
+                            <div class="h-48 bg-techgreen-light flex items-center justify-center relative overflow-hidden">
+                                <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(#00A859 1px, transparent 1px); background-size: 20px 20px;"></div>
+                                <h4 class="text-3xl font-black text-techgreen-dark relative z-10 tracking-widest uppercase">能源自由</h4>
+                            </div>
+                            <div class="p-8">
+                                <p class="text-xl text-premiumgrey-dark font-light leading-relaxed mb-6">
+                                    将复杂的工业参数，收敛于极简的科技美学之中。无缝融入生活空间，提供全天候的确定的能量。
+                                </p>
+                                <div class="grid grid-cols-3 gap-4 border-t border-gray-100 pt-6">
+                                    <div><div class="text-2xl font-black text-techgreen">100%</div><div class="text-xs text-premiumgrey font-bold mt-1 uppercase">家庭能源独立</div></div>
+                                    <div><div class="text-2xl font-black text-techgreen">IP65</div><div class="text-xs text-premiumgrey font-bold mt-1 uppercase">全天候艺术品</div></div>
+                                    <div><div class="text-2xl font-black text-techgreen">0 噪音</div><div class="text-xs text-premiumgrey font-bold mt-1 uppercase">静谧运行</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 03: Experiential GTM (Deye) -->
+            <section id="sec-gtm" class="content-section hidden">
+                <header class="mb-10">
+                    <div class="inline-block px-3 py-1 bg-techgreen-light text-techgreen-dark text-xs font-bold rounded-sm mb-4 uppercase tracking-widest">Experiential GTM</div>
+                    <h2 class="text-3xl md:text-4xl font-black text-premiumgrey-dark mb-4">体验式营销与效能中台</h2>
+                    <p class="text-lg text-premiumgrey leading-relaxed max-w-3xl">
+                        展会不是物理设备的堆叠，而是构建“能源自由生活方式”的高转化样板间。统筹全球 120+ 国家办事处资源，将碎片化动作转化为品牌资产复利。
+                    </p>
+                </header>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-12">
+                    <div>
+                        <h3 class="text-xl font-bold mb-6 text-center">三层内容金字塔模型</h3>
+                        <div class="flex flex-col items-center space-y-2">
+                            <div class="pyramid-level bg-techgreen text-white w-1/3 py-4 text-center rounded-t-lg font-bold shadow-md" data-info="top">顶层：品牌愿景</div>
+                            <div class="pyramid-level bg-techgreen-light text-techgreen-dark w-2/3 py-4 text-center font-bold shadow-md" data-info="mid">中层：场景价值</div>
+                            <div class="pyramid-level bg-gray-200 text-premiumgrey-dark w-full py-4 text-center rounded-b-lg font-bold shadow-md" data-info="bottom">底层：技术硬核</div>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 min-h-[250px] flex flex-col justify-center">
+                        <div id="pyramid-info" class="text-premiumgrey">
+                            <h4 class="text-2xl font-black text-techgreen mb-4">点击左侧金字塔交互</h4>
+                            <p class="leading-relaxed">查看 AI 驱动的标准化 SOP 如何打破 TK 内容生产力瓶颈，用工业化的流程，制造艺术化的内容。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 04: Cross-City Synergy (Deye) -->
+            <section id="sec-synergy" class="content-section hidden">
+                <header class="mb-10">
+                    <div class="inline-block px-3 py-1 bg-techgreen-light text-techgreen-dark text-xs font-bold rounded-sm mb-4 uppercase tracking-widest">The Strategic Bridge</div>
+                    <h2 class="text-3xl md:text-4xl font-black text-premiumgrey-dark mb-4">跨城协同：上海大脑与慈溪副本</h2>
+                    <p class="text-lg text-premiumgrey leading-relaxed max-w-3xl">
+                        我是上海战略意图在慈溪制造总部的“执行质检员”。打破“上海想得很美，慈溪做得粗糙”的痛点，确保品牌顶层设计 100% 高保真还原。
+                    </p>
+                </header>
+
+                <div class="bg-white p-10 rounded-xl shadow-sm border border-gray-100 mb-8">
+                    <h3 class="text-xl font-bold mb-10 text-center">零损耗落地 SOP：1小时车程的战术意义</h3>
+                    <div class="flex flex-col md:flex-row items-center justify-between max-w-4xl mx-auto relative">
+                        <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gray-200 -z-10 transform -translate-y-1/2"></div>
+                        
+                        <div class="bg-gray-50 border-2 border-premiumgrey-dark p-6 rounded-full w-48 h-48 flex flex-col items-center justify-center text-center z-10 bg-white mb-6 md:mb-0 shadow-lg">
+                            <span class="text-3xl mb-2">&#127970;</span>
+                            <h4 class="font-black text-lg">上海大脑</h4>
+                            <p class="text-xs text-gray-500 mt-1">品牌顶层设计</p>
+                        </div>
+
+                        <div class="flex flex-col items-center z-10 px-4 mb-6 md:mb-0 bg-white py-2">
+                            <div class="bg-techgreen text-white text-xs font-bold px-4 py-2 rounded-full mb-2 shadow-md animate-pulse">执行质检员 (我)</div>
+                            <div class="text-techgreen-dark text-2xl rotate-90 md:rotate-0">&#10145;&#65039;</div>
+                            <p class="text-xs font-bold mt-2 text-premiumgrey text-center">消除摩擦力</p>
+                        </div>
+
+                        <div class="bg-techgreen-light border-2 border-techgreen p-6 rounded-full w-48 h-48 flex flex-col items-center justify-center text-center z-10 mb-6 md:mb-0 shadow-lg">
+                            <span class="text-3xl mb-2">&#127981;</span>
+                            <h4 class="font-black text-lg text-techgreen-dark">慈溪制造</h4>
+                            <p class="text-xs text-techgreen-dark mt-1">硬核研发高保真</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- PART II: KIWE E2E SECTIONS -->
+            <!-- ========================================== -->
+
+            <!-- SECTION 05: The Technical Translator (Kiwe) -->
+            <section id="sec-translator" class="content-section hidden">
+                <header class="mb-12">
+                    <div class="inline-block px-3 py-1 bg-obsidian text-champagne text-xs font-bold rounded-sm mb-4 tracking-widest uppercase">The Technical Translator</div>
+                    <h2 class="text-4xl font-black text-obsidian mb-4">产研转译：从“卖铁”到“卖方案”</h2>
+                    <p class="text-lg text-gray-600 leading-relaxed max-w-3xl">
+                        面对复杂的工业灯具 SKU（如 Grace Lighting），我不仅是物料员，更是卖点定义者。将“工程师语言”翻译为“全球市场溢价”，显著缩短大客户决策周期。
+                    </p>
+                </header>
+
+                <div class="bg-white p-2 rounded-xl shadow-sm border border-gray-100 flex items-center justify-center space-x-4 mb-8 max-w-sm mx-auto">
+                    <button id="btn-kiwe-specs" class="flex-1 py-2 text-sm font-bold bg-ivory-dark text-gray-500 rounded-lg transition-colors">工程师语言 (卖铁)</button>
+                    <button id="btn-kiwe-solution" class="flex-1 py-2 text-sm font-bold bg-obsidian text-champagne rounded-lg shadow-md transition-colors">市场溢价 (卖方案)</button>
+                </div>
+
+                <div class="relative bg-white border border-gray-200 rounded-2xl p-10 min-h-[400px] overflow-hidden shadow-sm">
+                    <!-- State: Specs -->
+                    <div id="kiwe-view-specs" class="hidden absolute inset-0 p-10 bg-gray-50 flex flex-col justify-center items-center text-center">
+                        <div class="font-mono text-gray-400 text-6xl mb-4 font-black">SKU-892A</div>
+                        <ul class="text-left space-y-3 font-mono text-sm text-gray-600 border-l-2 border-gray-300 pl-6">
+                            <li><span class="font-bold">Optics:</span> 3-in-1 PC Lens</li>
+                            <li><span class="font-bold">Beam Angle:</span> 60° / 90° / 120° Adjustable</li>
+                            <li><span class="font-bold">Luminous Efficacy:</span> 150 lm/W</li>
+                        </ul>
+                        <div class="mt-8 px-6 py-2 bg-red-50 text-red-600 text-xs font-bold border border-red-100 rounded">痛点：深陷价格战泥潭，客户难以理解价值。</div>
+                    </div>
+
+                    <!-- State: Solution -->
+                    <div id="kiwe-view-solution" class="absolute inset-0 p-10 bg-obsidian text-white flex flex-col justify-center transition-all duration-500">
+                        <div class="max-w-2xl mx-auto w-full">
+                            <h3 class="text-3xl font-black text-champagne mb-6 border-b border-gray-700 pb-4">仓储级智能照明解决方案</h3>
+                            <p class="text-gray-300 text-lg leading-relaxed mb-8">
+                                无需复杂的选型，一套系统适配所有层高。专有透镜技术精准覆盖作业区域，提升 30% 安全性，降低 40% 能耗。
+                            </p>
+                            <div class="grid grid-cols-3 gap-6">
+                                <div class="border-l-2 border-champagne pl-4"><div class="text-2xl font-black">3合1</div><div class="text-xs text-gray-400 mt-1 uppercase">全场景适配</div></div>
+                                <div class="border-l-2 border-champagne pl-4"><div class="text-2xl font-black">150<span class="text-sm">lm/W</span></div><div class="text-xs text-gray-400 mt-1 uppercase">极致能效</div></div>
+                                <div class="border-l-2 border-champagne pl-4"><div class="text-2xl font-black text-champagne">Highbay</div><div class="text-xs text-gray-400 mt-1 uppercase">大客户信赖</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 视觉铁证：产品视觉化手册 -->
+                <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+                    <h4 class="text-lg font-bold text-obsidian mb-4 border-l-4 border-champagne pl-3">核心资产交付：高保真视觉化产品手册</h4>
+                    <p class="text-sm text-gray-500 mb-6">直接展示从“枯燥参数”向“场景化卖点”的降维翻译成果，赋能海外 B 端销售。</p>
+                    <img src="./产品视觉化手册.png" alt="产品视觉化手册" class="w-full rounded-lg border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+                </div>
+            </section>
+
+            <!-- SECTION 06: Global Content Engine (Kiwe) -->
+            <section id="sec-engine" class="content-section hidden">
+                <header class="mb-12">
+                    <div class="inline-block px-3 py-1 bg-obsidian text-champagne text-xs font-bold rounded-sm mb-4 tracking-widest uppercase">Global Content Engine</div>
+                    <h2 class="text-4xl font-black text-obsidian mb-4">资产 SOP：解决跨国执行变形</h2>
+                    <p class="text-lg text-gray-600 leading-relaxed max-w-3xl">
+                        建立全球统一的品牌“内容工厂”。为总部战略在 120+ 国家的落地提供高保真载体，确保品牌在全球终端窗口的视觉统治力。
+                    </p>
+                </header>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="data-card bg-white p-8 rounded-xl border border-gray-200 shadow-sm relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gray-200 group-hover:bg-champagne transition-colors"></div>
+                        <h3 class="text-xl font-black text-obsidian mb-2 mt-4">宏观定调</h3>
+                        <p class="text-sm text-gray-500">Corporate Video & 品牌白皮书。统一发声基调，消除全球认知偏差。</p>
+                    </div>
+                    <div class="data-card bg-white p-8 rounded-xl border border-gray-200 shadow-sm relative overflow-hidden group">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gray-200 group-hover:bg-champagne transition-colors"></div>
+                        <h3 class="text-xl font-black text-obsidian mb-2 mt-4">中观转译</h3>
+                        <p class="text-sm text-gray-500">将技术参数转化为高溢价视觉资产，拒绝说明书式表达。</p>
+                    </div>
+                    <div class="data-card bg-obsidian p-8 rounded-xl shadow-md relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-champagne"></div>
+                        <h3 class="text-xl font-black text-champagne mb-2 mt-4">微观赋能</h3>
+                        <p class="text-sm text-gray-300">标准 Sales Tool Kit。为前线销售提供傻瓜式、高审美的谈判武器。</p>
+                    </div>
+                </div>
+
+                <!-- 视觉铁证：SOP与项目管理 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-col">
+                        <h4 class="text-sm font-bold text-gray-500 mb-3 uppercase tracking-wider">01 / 品牌宏观定调</h4>
+                        <img src="./品牌白皮书.png" alt="品牌白皮书" class="w-full rounded-lg border border-gray-100 shadow-sm flex-1 object-cover hover:shadow-md transition-shadow">
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 flex flex-col">
+                        <h4 class="text-sm font-bold text-gray-500 mb-3 uppercase tracking-wider">02 / 全球展会 PMO 级管控</h4>
+                        <img src="./高瑞法兰克福PMO项目管理.png" alt="高瑞法兰克福PMO项目管理" class="w-full rounded-lg border border-gray-100 shadow-sm flex-1 object-cover hover:shadow-md transition-shadow">
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 07: Channel Empowerment (Kiwe) -->
+            <section id="sec-channel" class="content-section hidden">
+                <header class="mb-12">
+                    <div class="inline-block px-3 py-1 bg-obsidian text-champagne text-xs font-bold rounded-sm mb-4 tracking-widest uppercase">Channel Empowerment</div>
+                    <h2 class="text-4xl font-black text-obsidian mb-4">渠道赋能：审美溢价驱动爆发</h2>
+                    <p class="text-lg text-gray-600 leading-relaxed max-w-3xl">
+                        用“审美溢价”解决产销矛盾。在缸鸭狗案例中，通过“新年祈福”体验式转型，赢下山姆 KA 渠道盲测。证明了视觉亮点的核弹级威力。
+                    </p>
+                </header>
+
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200 mb-8">
+                    <div class="flex justify-between items-end mb-6">
+                        <div>
+                            <h3 class="text-2xl font-black text-obsidian">社交媒体互动与销量态势</h3>
+                            <p class="text-sm text-gray-500">缸鸭狗 x 山姆渠道战役数据对比</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-4xl font-black text-champagne-dark">+845%</span>
+                            <p class="text-xs font-bold text-gray-400 tracking-wider">精准增长率</p>
+                        </div>
+                    </div>
+                    <div class="chart-container"><canvas id="growthChart"></canvas></div>
+                </div>
+
+                <!-- 视觉铁证：体验式营销与渠道赋能全景 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <!-- 缸鸭狗阵列 -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 hover:border-champagne transition-colors">
+                            <h4 class="text-sm font-bold text-obsidian mb-1">山姆 KA 渠道突围包装</h4>
+                            <p class="text-xs text-gray-400 mb-3">高审美势能反哺渠道谈判</p>
+                            <img src="./缸鸭狗山姆包装.png" alt="缸鸭狗山姆包装" class="w-full rounded-lg border border-gray-100">
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 hover:border-champagne transition-colors">
+                            <h4 class="text-sm font-bold text-obsidian mb-1">大型地推与用户体验场</h4>
+                            <p class="text-xs text-gray-400 mb-3">将传统推销转化为“新年祈福”沉浸式互动</p>
+                            <img src="./缸鸭狗地推美陈.png" alt="缸鸭狗地推美陈" class="w-full rounded-lg mb-3 border border-gray-100">
+                            <img src="./缸鸭狗大型活动用户互动现场.png" alt="缸鸭狗大型活动用户互动现场" class="w-full rounded-lg border border-gray-100">
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 hover:border-champagne transition-colors">
+                            <h4 class="text-sm font-bold text-obsidian mb-1">文化资产沉淀</h4>
+                            <p class="text-xs text-gray-400 mb-3">品牌手册视觉系统构建</p>
+                            <img src="./缸鸭狗手册.png" alt="缸鸭狗手册" class="w-full rounded-lg border border-gray-100">
+                        </div>
+                    </div>
+                    
+                    <!-- 高瑞阵列与增量确权 -->
+                    <div class="space-y-6">
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 hover:border-champagne transition-colors">
+                            <h4 class="text-sm font-bold text-obsidian mb-1">B2B 展会视觉转化</h4>
+                            <p class="text-xs text-gray-400 mb-3">打造生鲜照明场景化样板间</p>
+                            <img src="./高瑞B2B展会视觉转化.png" alt="高瑞B2B展会视觉转化" class="w-full rounded-lg border border-gray-100">
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-200 hover:border-champagne transition-colors">
+                            <h4 class="text-sm font-bold text-obsidian mb-1">展会落地 YoY 增长确权</h4>
+                            <p class="text-xs text-gray-400 mb-3">审美溢价带来的真实商业转化</p>
+                            <img src="./高瑞展会落地YoY增长.png" alt="高瑞展会落地YoY增长" class="w-full rounded-lg border border-gray-100">
+                        </div>
+                        
+                        <!-- The Delta (增量确权) -->
+                        <div class="bg-obsidian p-6 rounded-2xl shadow-md text-white mt-8 relative overflow-hidden">
+                            <div class="absolute top-0 left-0 w-1 bg-champagne h-full"></div>
+                            <h4 class="font-black text-xl mb-3 text-champagne tracking-wider">THE DELTA</h4>
+                            <p class="text-sm leading-relaxed text-gray-300 opacity-90">
+                                不论是快消零售 (缸鸭狗) 还是高端制造 (Grace Lighting)，高审美的视觉势能与结构化的体验设计，绝非虚无缥缈的粉饰，它最终都会实打实地转化为 <strong class="text-white">KA 渠道准入率</strong>、<strong class="text-white">海外客户的低摩擦采购</strong> 以及 <strong class="text-white">不可逆的销售 YoY 爆发</strong>。<br><br>
+                                这就是我带来的确定性增量。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // --- 1. Navigation & State Management ---
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = document.querySelectorAll('.content-section');
+        
+        // Track which charts are loaded to prevent re-initialization
+        const state = {
+            strategyChartsLoaded: false,
+            channelChartLoaded: false
+        };
+
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                // Reset all nav items (Remove active styles)
+                navItems.forEach(nav => {
+                    nav.classList.remove('active', 'bg-champagne-light', 'border-r-4', 'border-champagne', 'font-bold');
+                    nav.classList.add('text-gray-600');
+                    nav.classList.remove('text-obsidian');
+                });
+                
+                // Add active style to clicked item
+                const currentNav = e.currentTarget;
+                currentNav.classList.add('active', 'bg-champagne-light', 'border-r-4', 'border-champagne', 'font-bold', 'text-obsidian');
+                currentNav.classList.remove('text-gray-600');
+
+                // Update active section
+                const targetId = currentNav.getAttribute('data-target');
+                sections.forEach(sec => {
+                    sec.classList.add('hidden');
+                    sec.classList.remove('fade-in');
+                });
+                const targetSec = document.getElementById(targetId);
+                targetSec.classList.remove('hidden');
+                
+                // Trigger reflow for animation
+                void targetSec.offsetWidth; 
+                targetSec.classList.add('fade-in');
+
+                // Lazy load charts based on section
+                if(targetId === 'sec-strategy' && !state.strategyChartsLoaded) {
+                    initStrategyCharts();
+                    state.strategyChartsLoaded = true;
+                }
+                if(targetId === 'sec-channel' && !state.channelChartLoaded) {
+                    initGrowthChart();
+                    state.channelChartLoaded = true;
+                }
+            });
+        });
+
+        // --- 2. Chart.js Initializations ---
+        Chart.defaults.font.family = "'Noto Sans SC', sans-serif";
+
+        function initStrategyCharts() {
+            // Revenue Chart (Deye)
+            const ctxRev = document.getElementById('revenueChart').getContext('2d');
+            new Chart(ctxRev, {
+                type: 'line',
+                data: {
+                    labels: ['2024', '2025', '2026', '2027', '2028', '2029', '2030(E)'],
+                    datasets: [
+                        { label: '代工模式预期', data: [15, 17, 19, 21, 23, 24, 25], borderColor: '#9CA3AF', borderDash: [5, 5], tension: 0.4 },
+                        { label: '品牌溢价驱动', data: [15, 19, 24, 30, 36, 43, 50], borderColor: '#00A859', backgroundColor: 'rgba(0, 168, 89, 0.1)', fill: true, tension: 0.4 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // Radar Chart (Deye)
+            const ctxRadar = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: ['价格', '溢价', '美学', '渠道', '硬核度'],
+                    datasets: [
+                        { label: '增量市场', data: [90, 50, 40, 80, 85], borderColor: '#9CA3AF' },
+                        { label: '欧洲市场', data: [60, 95, 90, 85, 90], borderColor: '#00A859' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        function initGrowthChart() {
+            // Growth Chart (Kiwe/Gangyagou)
+            const ctxGrowth = document.getElementById('growthChart').getContext('2d');
+            new Chart(ctxGrowth, {
+                type: 'line',
+                data: {
+                    labels: ['筹备期', '铺设期', '发酵期', '盲测突围', '全渠道爆发'],
+                    datasets: [
+                        { label: '传统推销', data: [100, 110, 105, 120, 130], borderColor: '#D4D4D8', borderDash: [5, 5], tension: 0.4 },
+                        { label: '审美溢价驱动', data: [100, 180, 450, 800, 945], borderColor: '#D4AF37', backgroundColor: 'rgba(212, 175, 55, 0.1)', fill: true, tension: 0.4, pointBackgroundColor: '#171717' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        // Initialize default visible charts
+        initStrategyCharts();
+        state.strategyChartsLoaded = true;
+
+        // --- 3. Interactive Toggles ---
+        
+        // Deye A/B Logic
+        const btnDeyeOld = document.getElementById('btn-deye-old');
+        const btnDeyeNew = document.getElementById('btn-deye-new');
+        const stateDeyeOld = document.getElementById('deye-state-old');
+        const stateDeyeNew = document.getElementById('deye-state-new');
+        const areaDeye = document.getElementById('deye-ab-area');
+
+        btnDeyeOld.addEventListener('click', () => {
+            btnDeyeOld.classList.add('bg-white', 'shadow-sm', 'text-premiumgrey-dark');
+            btnDeyeNew.classList.remove('bg-white', 'shadow-sm', 'text-premiumgrey-dark');
+            areaDeye.classList.replace('bg-techgreen-light', 'bg-gray-100');
+            stateDeyeNew.classList.add('hidden');
+            stateDeyeOld.classList.remove('hidden');
+        });
+
+        btnDeyeNew.addEventListener('click', () => {
+            btnDeyeNew.classList.add('bg-white', 'shadow-sm', 'text-premiumgrey-dark');
+            btnDeyeOld.classList.remove('bg-white', 'shadow-sm', 'text-premiumgrey-dark');
+            areaDeye.classList.replace('bg-gray-100', 'bg-techgreen-light');
+            stateDeyeOld.classList.add('hidden');
+            stateDeyeNew.classList.remove('hidden', 'opacity-0', 'scale-95');
+        });
+
+        // Kiwe Translator A/B Logic
+        const btnKiweSpecs = document.getElementById('btn-kiwe-specs');
+        const btnKiweSolution = document.getElementById('btn-kiwe-solution');
+        const viewKiweSpecs = document.getElementById('kiwe-view-specs');
+        const viewKiweSolution = document.getElementById('kiwe-view-solution');
+
+        btnKiweSpecs.addEventListener('click', () => {
+            btnKiweSpecs.classList.replace('bg-ivory-dark', 'bg-obsidian');
+            btnKiweSpecs.classList.replace('text-gray-500', 'text-champagne');
+            btnKiweSolution.classList.replace('bg-obsidian', 'bg-ivory-dark');
+            btnKiweSolution.classList.replace('text-champagne', 'text-gray-500');
+            viewKiweSolution.classList.add('hidden');
+            viewKiweSpecs.classList.remove('hidden');
+        });
+
+        btnKiweSolution.addEventListener('click', () => {
+            btnKiweSolution.classList.replace('bg-ivory-dark', 'bg-obsidian');
+            btnKiweSolution.classList.replace('text-gray-500', 'text-champagne');
+            btnKiweSpecs.classList.replace('bg-obsidian', 'bg-ivory-dark');
+            btnKiweSpecs.classList.replace('text-champagne', 'text-gray-500');
+            viewKiweSpecs.classList.add('hidden');
+            viewKiweSolution.classList.remove('hidden');
+        });
+
+        // Deye Pyramid Logic
+        const pyramidData = {
+            top: { title: "顶层：品牌愿景", content: "输出TVC与白皮书，传递能源自由。", color: "text-techgreen" },
+            mid: { title: "中层：场景价值", content: "场景渲染与展台设计，激发体验购买欲。", color: "text-techgreen" },
+            bottom: { title: "底层：技术硬核", content: "技术图表与安装 SOP，提供理性支撑。", color: "text-premiumgrey-dark" }
+        };
+        document.querySelectorAll('.pyramid-level').forEach(level => {
+            level.addEventListener('click', function() {
+                document.querySelectorAll('.pyramid-level').forEach(l => l.classList.remove('active-level'));
+                this.classList.add('active-level');
+                const data = pyramidData[this.getAttribute('data-info')];
+                const panel = document.getElementById('pyramid-info');
+                panel.style.opacity = 0;
+                setTimeout(() => {
+                    panel.innerHTML = `<h4 class="text-2xl font-black ${data.color} mb-4">${data.title}</h4><p class="leading-relaxed text-gray-700">${data.content}</p>`;
+                    panel.style.opacity = 1;
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
